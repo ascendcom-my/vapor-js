@@ -1,4 +1,4 @@
-const axs = require('axios')
+const axs = require('axios').create()
 axs.defaults.headers.common = {};
 axs.defaults.withCredentials = false;
 
