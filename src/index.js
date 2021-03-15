@@ -1,4 +1,6 @@
-const axios = require('axios')
+const axs = require('axios')
+axs.defaults.headers.common = {};
+axs.defaults.withCredentials = false;
 
 class Vapor
 {
@@ -6,11 +8,12 @@ class Vapor
      * Store a file in S3 and return its UUID, key, and other information.
      */
     async store(file, options = {}) {
-        const response = await axios.post('/vapor/signed-storage-url', {
+        const response = await axs.post('/vapor/signed-storage-url', {
             'bucket': options.bucket || '',
             'content_type': options.contentType || file.type,
             'expires': options.expires || '',
-            'visibility': options.visibility || ''
+            'visibility': options.visibility || '',
+            'disk': options.disk || 's3',
         }, {
             baseURL: options.baseURL || null,
             headers: options.headers || {},
@@ -29,7 +32,7 @@ class Vapor
 
         const cancelToken = options.cancelToken || ''
 
-        await axios.put(response.data.url, file, {
+        await axs.put(response.data.url, file, {
             cancelToken: cancelToken,
             headers: headers,
             onUploadProgress: (progressEvent) => {
